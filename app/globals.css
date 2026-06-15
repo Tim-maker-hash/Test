@@ -1,0 +1,246 @@
+@import "tailwindcss";
+
+:root {
+  --background: #060606;
+  --foreground: #ffffff;
+  --red: #DC0000;
+  --red-dark: #8B0000;
+  --red-bright: #FF1E1E;
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dark: #8B6914;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-red: var(--red);
+  --color-red-dark: var(--red-dark);
+  --color-red-bright: var(--red-bright);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #111;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--red);
+  border-radius: 2px;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* Glitch animation */
+@keyframes glitch {
+  0% { clip-path: inset(0 0 98% 0); transform: translate(-4px, 0); }
+  10% { clip-path: inset(40% 0 50% 0); transform: translate(4px, 0); }
+  20% { clip-path: inset(80% 0 5% 0); transform: translate(-4px, 0); }
+  30% { clip-path: inset(20% 0 70% 0); transform: translate(4px, 0); }
+  40% { clip-path: inset(60% 0 30% 0); transform: translate(-4px, 0); }
+  50% { clip-path: inset(10% 0 85% 0); transform: translate(4px, 0); }
+  60% { clip-path: inset(90% 0 3% 0); transform: translate(-4px, 0); }
+  70% { clip-path: inset(5% 0 90% 0); transform: translate(4px, 0); }
+  80% { clip-path: inset(70% 0 20% 0); transform: translate(-4px, 0); }
+  90% { clip-path: inset(30% 0 60% 0); transform: translate(4px, 0); }
+  100% { clip-path: inset(0 0 98% 0); transform: translate(0, 0); }
+}
+
+@keyframes glitch2 {
+  0% { clip-path: inset(0 0 98% 0); transform: translate(4px, 0); opacity: 0.7; }
+  15% { clip-path: inset(60% 0 30% 0); transform: translate(-4px, 0); }
+  35% { clip-path: inset(10% 0 80% 0); transform: translate(4px, 0); }
+  55% { clip-path: inset(75% 0 10% 0); transform: translate(-4px, 0); }
+  75% { clip-path: inset(25% 0 65% 0); transform: translate(4px, 0); }
+  100% { clip-path: inset(0 0 98% 0); transform: translate(0, 0); opacity: 0; }
+}
+
+.glitch-text {
+  position: relative;
+}
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+.glitch-text::before {
+  color: var(--red);
+  animation: glitch 4s infinite step-start;
+}
+.glitch-text::after {
+  color: var(--gold);
+  animation: glitch2 4s infinite step-start;
+  animation-delay: 0.5s;
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--gold-dark) 0%,
+    var(--gold) 30%,
+    var(--gold-light) 50%,
+    var(--gold) 70%,
+    var(--gold-dark) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Scan line effect */
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scan-line {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(220, 0, 0, 0.3), transparent);
+  pointer-events: none;
+  z-index: 9998;
+  animation: scan 6s linear infinite;
+}
+
+/* Red glow pulse */
+@keyframes red-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(220, 0, 0, 0.3); }
+  50% { box-shadow: 0 0 60px rgba(220, 0, 0, 0.8); }
+}
+
+.red-glow {
+  animation: red-pulse 2s ease-in-out infinite;
+}
+
+/* Gold glow */
+@keyframes gold-pulse {
+  0%, 100% { text-shadow: 0 0 10px rgba(201, 168, 76, 0.3); }
+  50% { text-shadow: 0 0 30px rgba(201, 168, 76, 0.9); }
+}
+
+/* Number counter animation */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Racing line animation */
+@keyframes racing-line {
+  0% { transform: translateX(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(100vw); opacity: 0; }
+}
+
+/* Tilt card container */
+.tilt-container {
+  transform-style: preserve-3d;
+  transform: perspective(1200px);
+}
+
+/* Fade in from bottom */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(60px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Text reveal */
+@keyframes textReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0% 0 0); }
+}
+
+/* Custom cursor */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.1s ease;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring.hovering {
+  width: 60px;
+  height: 60px;
+  border-color: var(--red);
+}
+
+/* Horizontal line decorations */
+.red-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+}
+
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* Section transition overlay */
+.section-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, var(--background) 100%);
+  pointer-events: none;
+}
